@@ -19,15 +19,19 @@ This is a simple newsletter signup application built with Node.js, Express, and 
 1. Clone the repository:
    ```sh
    git clone https://github.com/amankumaragrawal/newsletter-signup.git
+   ```
+
+2. Change to the project directory:
+   ```sh
    cd newsletter-signup
    ```
 
-2. Install dependencies:
+3. Install dependencies:
    ```sh
    npm install
    ```
 
-3. Create a `.env` file in the root directory and add your Mailchimp API key:
+4. Create a `.env` file in the root directory and add your Mailchimp API key:
    ```env
     BREVO_API_KEY=your_api_key
     BREVO_LIST_ID=list_id
