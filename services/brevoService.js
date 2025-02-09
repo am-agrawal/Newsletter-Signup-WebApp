@@ -9,18 +9,36 @@ const contactApi = new SibApiV3Sdk.ContactsApi();
 const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
 exports.addToBrevo = async (firstName, lastName, email) => {
+  const listId = Number(process.env.BREVO_LIST_ID);
   const contactData = {
     email,
     attributes: { FIRSTNAME: firstName, LASTNAME: lastName },
-    listIds: [2], // Replace with your Brevo list ID
+    listIds: [listId],
   };
 
-  await contactApi.createContact(contactData);
+  try {
+    await contactApi.createContact(contactData);
+  } catch (error) {
+    if (error.response && error.response.body.code === 'duplicate_parameter') {
+      console.log(
+        `Contact with email ${email} already exists. Updating contact.`
+      );
+      await contactApi.updateContact(email, {
+        attributes: { FIRSTNAME: firstName, LASTNAME: lastName },
+        listIds: [listId],
+      });
+    } else {
+      throw error;
+    }
+  }
 };
 
 exports.sendThankYouEmail = async (firstName, email) => {
+  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  const senderName = process.env.BREVO_SENDER_NAME;
+
   const emailData = {
-    sender: { email: 'your-email@example.com', name: 'Your Name' },
+    sender: { email: senderEmail, name: senderName },
     to: [{ email, name: firstName }],
     subject: 'Thank You for Signing Up!',
     htmlContent: `<p>Hi ${firstName},</p><p>Thank you for signing up!</p>`,
