@@ -47,6 +47,12 @@ npm start
 ```
 The app will be available at `http://localhost:3000`
 
+### Using Docker Compose
+1. Build and Run the application:
+   ```sh
+   docker-compose up --build
+   ```
+
 ### Using Docker
 1. Build the Docker image:
    ```sh
